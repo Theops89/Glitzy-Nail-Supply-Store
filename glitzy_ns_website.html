@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glitzy_Ns - Cuticle Oils & Press-On Nails</title>
+  <style>
+    body {margin:0;font-family:'Poppins', sans-serif;background-color:#fff8fb;color:#3d1f1f;}
+    header {background:linear-gradient(135deg,#ffc0cb,#ffd700);color:white;text-align:center;padding:80px 20px;}
+    header h1 {font-size:3em;margin:0;}
+    header p {font-size:1.2em;margin-top:10px;}
+    section {padding:60px 20px;text-align:center;}
+    h2 {font-size:2em;color:#c71585;margin-bottom:20px;}
+    .products {display:flex;justify-content:center;flex-wrap:wrap;gap:30px;}
+    .product {background:white;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.1);width:280px;padding:20px;transition:transform 0.3s;}
+    .product:hover {transform:translateY(-5px);}
+    .product img {width:100%;border-radius:15px;height:200px;object-fit:cover;}
+    .product h3 {margin:15px 0 5px;color:#b22222;}
+    .product p {font-size:1em;color:#444;}
+    .product button {background:linear-gradient(135deg,#ffc0cb,#ffd700);border:none;color:white;padding:10px 20px;border-radius:30px;font-size:1em;cursor:pointer;transition:0.3s;margin:5px;}
+    .product button:hover {opacity:0.8;}
+    .about {background-color:#fff0f5;}
+    footer {background-color:#c71585;color:white;text-align:center;padding:30px 10px;}
+    footer a {color:#ffd700;text-decoration:none;font-weight:bold;}
+
+    /* Cart Styles */
+    #cart {position:fixed;top:20px;right:20px;background:#fff0f5;padding:20px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,0.2);width:300px;display:none;z-index:100;}
+    #cart h3 {margin-top:0;color:#b22222;}
+    #cart ul {list-style:none;padding:0;}
+    #cart li {display:flex;justify-content:space-between;margin:10px 0;}
+    #cart button {background:#c71585;color:white;border:none;padding:8px 15px;border-radius:20px;cursor:pointer;}
+    #cart-toggle {position:fixed;top:20px;right:20px;background:#c71585;color:white;padding:12px 20px;border:none;border-radius:30px;cursor:pointer;z-index:101;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Glitzy_Ns</h1>
+    <p>Luxury Cuticle Oils & Handcrafted Acrylic Press-On Nails</p>
+  </header>
+
+  <section class="about">
+    <h2>About Us</h2>
+    <p>At Glitzy_Ns, we bring luxury and care to your fingertips. Our cuticle oils nourish and protect, while our acrylic press-on nails add instant glam for any occasion.</p>
+  </section>
+
+  <section id="shop">
+    <h2>Shop Our Collection</h2>
+    <div class="products">
+      <div class="product" data-name="Cuticle Oil" data-price="12.99">
+        <img src="https://via.placeholder.com/280x200.png?text=Cuticle+Oil" alt="Cuticle Oil">
+        <h3>Cuticle Oil</h3>
+        <p>Hydrating and nourishing oil blend for healthy nails.</p>
+        <p><strong>$12.99</strong></p>
+        <button class="add-to-cart">Add to Cart</button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+      <div class="product" data-name="Press-On Nails" data-price="24.99">
+        <img src="https://via.placeholder.com/280x200.png?text=Press-On+Nails" alt="Press-On Nails">
+        <h3>Acrylic Press-On Nails</h3>
+        <p>Reusable press-ons designed for a perfect salon look at home.</p>
+        <p><strong>$24.99</strong></p>
+        <button class="add-to-cart">Add to Cart</button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Follow Us</h2>
+    <p>Stay connected and see our latest designs on Instagram!</p>
+    <a href="https://www.instagram.com/glitzy_ns" target="_blank">
+      <button style="background: linear-gradient(135deg, #ffd700, #ff69b4); padding: 12px 30px; border-radius: 30px; border:none; color:white; font-size:1.1em; cursor:pointer;">Visit @glitzy_ns</button>
+    </a>
+  </section>
+
+  <footer>
+    <p>© 2025 Glitzy_Ns | Designed with 💅 & ✨</p>
+  </footer>
+
+  <!-- Cart Toggle -->
+  <button id="cart-toggle">Cart 🛒</button>
+  <div id="cart">
+    <h3>Your Cart</h3>
+    <ul id="cart-items"></ul>
+    <p>Total: $<span id="cart-total">0.00</span></p>
+    <button id="checkout">Checkout</button>
+  </div>
+
+  <script>
+    const cartToggle = document.getElementById('cart-toggle');
+    const cart = document.getElementById('cart');
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout');
+
+    let cartArray = [];
+
+    cartToggle.addEventListener('click', () => {
+      cart.style.display = cart.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const product = e.target.closest('.product');
+        const name = product.dataset.name;
+        const price = parseFloat(product.dataset.price);
+
+        cartArray.push({name, price});
+        updateCart();
+      });
+    });
+
+    document.querySelectorAll('.buy-now').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const product = e.target.closest('.product');
+        const name = product.dataset.name;
+        const price = parseFloat(product.dataset.price);
+        alert(`Thank you for purchasing ${name} for $${price.toFixed(2)}!`);
+      });
+    });
+
+    function updateCart() {
+      cartItems.innerHTML = '';
+      let total = 0;
+      cartArray.forEach((item, index) => {
+        total += item.price;
+        const li = document.createElement('li');
+        li.innerHTML = `${item.name} - $${item.price.toFixed(2)} <button onclick='removeItem(${index})'>Remove</button>`;
+        cartItems.appendChild(li);
+      });
+      cartTotal.textContent = total.toFixed(2);
+    }
+
+    function removeItem(index) {
+      cartArray.splice(index, 1);
+      updateCart();
+    }
+
+    checkoutBtn.addEventListener('click', () => {
+      if(cartArray.length === 0) { alert('Your cart is empty!'); return; }
+      alert(`Thank you for your purchase of $${parseFloat(cartTotal.textContent).toFixed(2)}!`);
+      cartArray = [];
+      updateCart();
+    });
+  </script>
+</body>
+</html>
